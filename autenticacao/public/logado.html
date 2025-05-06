@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Logado</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <h1>Logado</h1>
+  <p id="welcomeText"></p>
+  <button id="logoutBtn">Sair</button>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+
+	//ajustar aqui
+	const firebaseConfig = {
+	  apiKey: "",
+	  authDomain: "",
+	  projectId: "",
+	  storageBucket: "",
+	  messagingSenderId: "",
+	  appId: ""
+	};
+	
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    const welcomeText = document.getElementById("welcomeText");
+    const logoutBtn = document.getElementById("logoutBtn");
+
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        welcomeText.textContent = `Você está logado com o usuário ${user.email}.`;
+      } else {
+        window.location.href = "login.html";
+      }
+    });
+
+    logoutBtn.addEventListener("click", async () => {
+      await signOut(auth);
+      window.location.href = "login.html";
+    });
+  </script>
+</body>
+</html>

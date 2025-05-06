@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<title>Cadastrar Usuário</title>
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+<div id="menu"></div>
+
+<h2>Cadastrar novo usuário</h2>
+
+<form id="formCadastro">
+  <label for="nome">Nome:</label>
+  <input type="text" id="nome" name="nome" required />
+
+  <label for="email">Email:</label>
+  <input type="email" id="email" name="email" required />
+
+  <button type="submit">Cadastrar</button>
+</form>
+
+<div id="message" class="message"></div>
+
+<script>
+async function loadMenu() {
+    const response = await fetch('menu.html');
+    const menuHTML = await response.text();
+    document.getElementById('menu').innerHTML = menuHTML;
+}
+loadMenu();
+
+const form = document.getElementById('formCadastro');
+const messageDiv = document.getElementById('message');
+
+form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const nome = form.nome.value.trim();
+    const email = form.email.value.trim();
+
+    if (!nome || !email) {
+        messageDiv.textContent = 'Por favor, preencha todos os campos.';
+        messageDiv.className = 'message error';
+        return;
+    }
+
+    try {
+        const res = await fetch('/usuarios', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({ nome, email })
+        });
+
+        if (!res.ok) {
+            const err = await res.json();
+            throw new Error(err.error || 'Erro desconhecido');
+        }
+
+        const data = await res.json();
+        messageDiv.textContent = `Usuário cadastrado com ID ${data.id}`;
+        messageDiv.className = 'message success';
+
+        form.reset();
+    } catch (error) {
+        messageDiv.textContent = `Erro ao cadastrar usuário: ${error.message}`;
+        messageDiv.className = 'message error';
+    }
+});
+</script>
+
+</body>
+</html>

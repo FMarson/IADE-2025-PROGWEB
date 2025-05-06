@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Página Inicial</title>
+</head>
+<body>
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+
+//    const firebaseConfig = {
+//      apiKey: "SUA_API_KEY",
+//      authDomain: "SEU_PROJETO.firebaseapp.com",
+//      projectId: "SEU_PROJETO",
+//    };
+
+	const firebaseConfig = {
+	  apiKey: "AIzaSyB2r4OgrPnQzNULuF7MmocUqvwnsiX9o-8",
+	  authDomain: "prog-web-iade.firebaseapp.com",
+	  projectId: "prog-web-iade",
+	  storageBucket: "prog-web-iade.firebasestorage.app",
+	  messagingSenderId: "754074166644",
+	  appId: "1:754074166644:web:e6a91a63fe4611d9f97821"
+	};
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        window.location.href = "logado.html";
+      } else {
+        window.location.href = "login.html";
+      }
+    });
+  </script>
+</body>
+</html>

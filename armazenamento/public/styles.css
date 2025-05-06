@@ -1,0 +1,61 @@
+body {
+  font-family: Arial, sans-serif;
+  margin: 50px;
+  text-align: center; /* Centraliza texto geral da página */
+}
+
+.form {
+  margin: 0 auto;
+  max-width: 320px;
+  text-align: left; /* Mantém inputs alinhados à esquerda dentro do formulário */
+}
+
+.form input {
+  display: block;
+  margin: 10px auto;
+  padding: 8px;
+  width: 100%;
+  max-width: 300px;
+}
+
+.form button,
+button.google-btn,
+button.reset-btn,
+#logoutBtn {
+  display: block;
+  margin: 15px auto;
+  padding: 10px;
+  width: 100%;
+  max-width: 320px;
+  cursor: pointer;
+}
+
+.google-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: white;
+}
+
+.google-icon {
+  width: 20px;
+  height: auto;
+}
+
+p,
+.error-msg,
+.success-msg {
+  margin-top: 10px;
+  text-align: center; /* Centraliza textos */
+}
+
+.error-msg {
+  color: red;
+}
+
+.success-msg {
+  color: green;
+}

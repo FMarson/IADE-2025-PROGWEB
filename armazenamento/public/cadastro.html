@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Cadastro</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <h2>Cadastro</h2>
+  <form id="signupForm" class="form">
+    <input type="email" id="email" name="email" placeholder="E-mail" required />
+    <input type="password" id="password" name="password" placeholder="Senha" required minlength="6" />
+    <button type="submit">Cadastrar</button>
+  </form>
+
+  <p>Já tem conta? <a href="login.html">Clique aqui para entrar</a></p>
+
+  <div id="error" class="error-msg"></div>
+  <div id="message" class="success-msg"></div>
+
+  <script type="module" src="./main.js"></script>
+</body>
+</html>

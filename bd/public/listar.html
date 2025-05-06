@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<title>Lista de Usuários</title>
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+<div id="menu"></div>
+
+<h2>Usuários cadastrados</h2>
+
+<table id="tabelaUsuarios">
+<thead>
+<tr><th>ID</th><th>Nome</th><th>Email</th><th>Ações</th></tr>
+</thead>
+<tbody></tbody>
+</table>
+
+<div id="message" class="message"></div>
+
+<script>
+async function loadMenu() {
+    const response = await fetch('menu.html');
+    const menuHTML = await response.text();
+    document.getElementById('menu').innerHTML = menuHTML;
+}
+loadMenu();
+
+async function carregarUsuarios() {
+    const tbody = document.querySelector('#tabelaUsuarios tbody');
+    const messageDiv = document.getElementById('message');
+    messageDiv.textContent = '';
+    tbody.innerHTML = '';
+
+    try {
+        const res = await fetch('/usuarios');
+        if (!res.ok) throw new Error('Falha ao carregar usuários.');
+
+        const usuarios = await res.json();
+
+        if (usuarios.length === 0) {
+            messageDiv.textContent = 'Nenhum usuário cadastrado.';
+            return;
+        }
+
+        usuarios.forEach(user => {
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td>${user.id}</td>
+                <td>${user.nome}</td>
+                <td>${user.email}</td>
+                <td>
+                    <button onclick="editarUsuario('${user.id}')">Editar</button>
+                    <button onclick="excluirUsuario('${user.id}')">Excluir</button>
+                </td>
+            `;
+            tbody.appendChild(tr);
+        });
+    } catch (err) {
+        messageDiv.textContent = err.message || 'Erro ao carregar usuários.';
+    }
+}
+
+function editarUsuario(id) {
+    window.location.href = `editar.html?id=${id}`;
+}
+
+async function excluirUsuario(id) {
+    if (!confirm('Confirma exclusão do usuário?')) return;
+
+    try {
+        const res = await fetch(`/usuarios/${id}`, { method: 'DELETE' });
+        if (!res.ok) throw new Error('Erro ao excluir usuário.');
+        carregarUsuarios();
+    } catch (err) {
+        alert(err.message || 'Erro ao excluir usuário.');
+    }
+}
+
+window.onload = carregarUsuarios;
+</script>
+
+</body>
+</html>

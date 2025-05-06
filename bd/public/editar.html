@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<title>Editar Usuário</title>
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+<div id="menu"></div>
+
+<h2>Editar usuário</h2>
+
+<form id="formEdicao">
+ <label for="nome">Nome:</label>
+ <input type="text" id="nome" name="nome" required />
+
+ <label for="email">Email:</label>
+ <input type="email" id="email" name="email" required />
+
+ <button type="submit">Salvar Alterações</button>
+</form>
+
+<div id="message" class="message"></div>
+
+<script>
+// Carregar menu
+async function loadMenu() {
+    const response = await fetch('menu.html');
+    const menuHTML = await response.text();
+    document.getElementById('menu').innerHTML = menuHTML;
+}
+loadMenu();
+
+// Extrair parâmetro id da URL
+function getQueryParam(param) {
+    const urlParams = new URLSearchParams(window.location.search);
+    return urlParams.get(param);
+}
+
+const form = document.getElementById('formEdicao');
+const messageDiv = document.getElementById('message');
+const userId = getQueryParam('id');
+
+async function carregarUsuario() {
+    try {
+        const res = await fetch(`/usuarios/${userId}`);
+        if (!res.ok) throw new Error('Usuário não encontrado.');
+
+        const user = await res.json();
+        form.nome.value = user.nome || '';
+        form.email.value = user.email || '';
+    } catch (err) {
+        messageDiv.textContent = err.message || 'Erro ao carregar usuário.';
+        messageDiv.className = 'message error';
+    }
+}
+
+form.addEventListener('submit', async e => {
+    e.preventDefault();
+
+    const nome = form.nome.value.trim();
+    const email = form.email.value.trim();
+
+    if (!nome || !email) {
+        messageDiv.textContent = 'Preencha todos os campos.';
+        messageDiv.className = 'message error';
+        return;
+    }
+
+    try {
+        const res = await fetch(`/usuarios/${userId}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ nome, email })
+        });
+
+        if (!res.ok) {
+            const errData = await res.json();
+            throw new Error(errData.error || 'Erro ao atualizar usuário.');
+        }
+
+        messageDiv.textContent = 'Usuário atualizado com sucesso.';
+        messageDiv.className = 'message success';
+    } catch (err) {
+        messageDiv.textContent = err.message || 'Erro ao atualizar usuário.';
+        messageDiv.className = 'message error';
+    }
+});
+
+window.onload = () => {
+    if (!userId) {
+        alert('ID do usuário não informado.');
+        window.location.href = 'listar.html';
+    } else {
+        carregarUsuario();
+    }
+};
+</script>
+
+</body>
+</html>
