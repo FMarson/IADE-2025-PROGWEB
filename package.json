@@ -1,0 +1,11 @@
+{
+  "name": "projetos",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "start": "concurrently \"npm start --prefix autenticacao\" \"npm start --prefix armazenamento\" \"npm start --prefix bd\""
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.2"
+  }
+}
